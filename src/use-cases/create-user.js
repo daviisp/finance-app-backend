@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { CreateUserRepository } from "../repositories/create-user";
+import { CreateUserRepository } from "../repositories/create-user.js";
 
 export class CreateUserUseCase {
     async execute(createUserParams) {
