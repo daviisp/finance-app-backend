@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 
-app.post("/api/user", (request, response) => {
+app.post("/api/users", (request, response) => {
     const createUserController = new CreateUserController();
     const { statusCode, body } = createUserController.execute(request);
 

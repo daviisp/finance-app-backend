@@ -1,4 +1,5 @@
 import { CreateUserUseCase } from "../use-cases/create-user.js";
+import validator from "validator";
 
 export class CreateUserController {
     execute(httpRequest) {
@@ -20,6 +21,25 @@ export class CreateUserController {
                         },
                     };
                 }
+            }
+
+            if (params.password.length < 6) {
+                return {
+                    statusCode: 400,
+                    body: {
+                        errorMessage:
+                            "Password must be at least 6 characters long",
+                    },
+                };
+            }
+
+            if (!validator.isEmail(params.email)) {
+                return {
+                    statusCode: 400,
+                    body: {
+                        errorMessage: "Invalid email",
+                    },
+                };
             }
 
             const createUserUseCase = new CreateUserUseCase();
