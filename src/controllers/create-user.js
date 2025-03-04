@@ -2,7 +2,7 @@ import { CreateUserUseCase } from "../use-cases/create-user.js";
 import validator from "validator";
 
 export class CreateUserController {
-    execute(httpRequest) {
+    async execute(httpRequest) {
         try {
             const params = httpRequest.body;
             const requiredFields = [
@@ -44,7 +44,7 @@ export class CreateUserController {
 
             const createUserUseCase = new CreateUserUseCase();
 
-            const createdUser = createUserUseCase.execute(params);
+            const createdUser = await createUserUseCase.execute(params);
 
             return {
                 statusCode: 201,
