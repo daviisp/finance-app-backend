@@ -1,6 +1,6 @@
-import bcrypt from "bcrypt";
 import { CreateUserRepository } from "../repositories/create-user.js";
 import { GetUserByEmailRepository } from "../repositories/get-user-by-email.js";
+import { hashPassword } from "../helpers/user.js";
 
 export class CreateUserUseCase {
     async execute(createUserParams) {
@@ -11,10 +11,10 @@ export class CreateUserUseCase {
         );
 
         if (userExists) {
-            throw new Error("Email already in use");
+            return { error: "Email already in use" };
         }
 
-        const hashedPassword = await bcrypt.hash(createUserParams.password, 10);
+        const hashedPassword = await hashPassword(createUserParams.password);
 
         const createUserRepository = new CreateUserRepository();
 

@@ -1,6 +1,10 @@
 import validator from "validator";
 import { UpdateUserUseCase } from "../use-cases/update-user.js";
-import { badRequest, updated } from "../helpers/http.js";
+import { badRequest, internalServerError, updated } from "../helpers/http.js";
+import {
+    verifyIfEmailIsValid,
+    verifyIfPasswordIsValid,
+} from "../helpers/user.js";
 
 export class UpdateUserController {
     async exeucte(httpRequest) {
@@ -8,7 +12,9 @@ export class UpdateUserController {
             const userId = httpRequest.params.id;
 
             if (!userId || !validator.isUUID(userId)) {
-                return badRequest("Missing or invalid id");
+                return badRequest({
+                    errorMessage: "Missing or invalid id",
+                });
             }
 
             const { firstName, lastName, email, password } = httpRequest.body;
@@ -19,19 +25,28 @@ export class UpdateUserController {
                 !email?.trim() &&
                 !password?.trim()
             ) {
-                return badRequest("At least one field must be provided");
+                return badRequest({
+                    errorMessage: "At least one field must be provided",
+                });
             }
 
-            if (email && !validator.isEmail(email)) {
-                return badRequest("Invalid email format");
+            if (password) {
+                const passwordIsValid = verifyIfPasswordIsValid(password);
+                if (!passwordIsValid) {
+                    return badRequest({
+                        errorMessage: "Invalid password",
+                    });
+                }
             }
 
-            if (password && password.trim().length < 6) {
-                return badRequest(
-                    "Password must be at least 6 characters long"
-                );
+            if (email) {
+                const emailIsValid = verifyIfEmailIsValid(email);
+                if (!emailIsValid) {
+                    return badRequest({
+                        errorMessage: "Invalid email",
+                    });
+                }
             }
-
             const userData = {
                 firstName,
                 lastName,
@@ -49,12 +64,9 @@ export class UpdateUserController {
             return updated(updatedUser);
         } catch (err) {
             console.error(err);
-            return {
-                statusCode: 500,
-                body: {
-                    errorMessage: "Internal server error",
-                },
-            };
+            return internalServerError({
+                errorMessage: "Internal server error",
+            });
         }
     }
 }
