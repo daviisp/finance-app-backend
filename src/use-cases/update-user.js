@@ -1,7 +1,7 @@
+import { hashPassword } from "../helpers/user.js";
 import { GetUserByEmailRepository } from "../repositories/get-user-by-email.js";
 import { GetUserByIdRepository } from "../repositories/get-user-by-id.js";
 import { UpdateUserRepository } from "../repositories/update-user.js";
-import bcrypt from "bcrypt";
 
 export class UpdateUserUseCase {
     async execute(userId, updateUserParams) {
@@ -29,9 +29,8 @@ export class UpdateUserUseCase {
         };
 
         if (updateUserParams.password) {
-            const hashedPassword = await bcrypt.hash(
-                updateUserParams.password,
-                10
+            const hashedPassword = await hashPassword(
+                updateUserParams.password
             );
             userData.password = hashedPassword;
         }
