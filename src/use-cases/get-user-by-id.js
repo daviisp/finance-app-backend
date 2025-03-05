@@ -1,6 +1,6 @@
 import { GetUserByIdRepository } from "../repositories/get-user-by-id.js";
 
-export class GetUSerByIdUseCase {
+export class GetUserByIdUseCase {
     async execute(userId) {
         const getUserByIdRepository = new GetUserByIdRepository();
 
