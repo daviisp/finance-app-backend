@@ -9,7 +9,9 @@ export class UpdateUserUseCase {
 
         const userExists = await getUserByIdRepository.execute(userId);
         if (!userExists) {
-            throw new Error("User not found");
+            return {
+                errorMessage: "User not found",
+            };
         }
 
         if (updateUserParams.email) {
@@ -20,7 +22,9 @@ export class UpdateUserUseCase {
             );
 
             if (emailAlreadyInUse) {
-                throw new Error("Email already in use");
+                return {
+                    errorMessage: "Email already in use",
+                };
             }
         }
 

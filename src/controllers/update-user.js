@@ -30,23 +30,29 @@ export class UpdateUserController {
                 });
             }
 
-            if (password) {
-                const passwordIsValid = verifyIfPasswordIsValid(password);
-                if (!passwordIsValid) {
-                    return badRequest({
-                        errorMessage: "Invalid password",
-                    });
-                }
+            if ("firstName" in httpRequest.body && !firstName.trim()) {
+                return badRequest({
+                    errorMessage: "First name cannot be empty",
+                });
             }
 
-            if (email) {
-                const emailIsValid = verifyIfEmailIsValid(email);
-                if (!emailIsValid) {
-                    return badRequest({
-                        errorMessage: "Invalid email",
-                    });
-                }
+            if ("lastName" in httpRequest.body && !lastName.trim()) {
+                return badRequest({
+                    errorMessage: "Last name cannot be empty",
+                });
             }
+
+            if (
+                "password" in httpRequest.body &&
+                !verifyIfPasswordIsValid(password)
+            ) {
+                return badRequest({ errorMessage: "Invalid password" });
+            }
+
+            if ("email" in httpRequest.body && !verifyIfEmailIsValid(email)) {
+                return badRequest({ errorMessage: "Invalid email" });
+            }
+
             const userData = {
                 firstName,
                 lastName,
@@ -56,12 +62,15 @@ export class UpdateUserController {
 
             const updateUserUseCase = new UpdateUserUseCase();
 
-            const updatedUser = await updateUserUseCase.execute(
-                userId,
-                userData
-            );
+            const result = await updateUserUseCase.execute(userId, userData);
 
-            return updated(updatedUser);
+            if (result.errorMessage) {
+                return badRequest({
+                    errorMessage: result.errorMessage,
+                });
+            }
+
+            return updated(result);
         } catch (err) {
             console.error(err);
             return internalServerError({
