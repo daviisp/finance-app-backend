@@ -11,7 +11,7 @@ export class CreateUserUseCase {
         );
 
         if (userExists) {
-            return { error: "Email already in use" };
+            return { errorMessage: "Email already in use" };
         }
 
         const hashedPassword = await hashPassword(createUserParams.password);

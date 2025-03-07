@@ -45,9 +45,9 @@ export class CreateUserController {
 
             const result = await createUserUseCase.execute(params);
 
-            if (result.error) {
+            if (result.errorMessage) {
                 return badRequest({
-                    errorMessage: "Email already in use",
+                    errorMessage: result.errorMessage,
                 });
             }
 
