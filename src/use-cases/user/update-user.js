@@ -1,4 +1,4 @@
-import { hashPassword } from "../helpers/user.js";
+import { hashPassword } from "../../helpers/user.js";
 
 export class UpdateUserUseCase {
     constructor(

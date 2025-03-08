@@ -1,14 +1,12 @@
-import { GetUserByEmailRepository } from "../repositories/get-user-by-email.js";
-import { hashPassword } from "../helpers/user.js";
+import { hashPassword } from "../../helpers/user.js";
 
 export class CreateUserUseCase {
-    constructor(createUserRepository) {
+    constructor(getUserByEmailRepository, createUserRepository) {
+        this.getUserByEmailRepository = getUserByEmailRepository;
         this.createUserRepository = createUserRepository;
     }
     async execute(createUserParams) {
-        const getUserByEmailRepository = new GetUserByEmailRepository();
-
-        const userExists = await getUserByEmailRepository.execute(
+        const userExists = await this.getUserByEmailRepository.execute(
             createUserParams.email
         );
 

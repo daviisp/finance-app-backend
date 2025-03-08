@@ -1,5 +1,9 @@
-import { badRequest, internalServerError, okEmpty } from "../helpers/http.js";
-import { verifyIfIdIsUUID } from "../helpers/user.js";
+import {
+    badRequest,
+    internalServerError,
+    okEmpty,
+} from "../../helpers/http.js";
+import { verifyIfIdIsUUID } from "../../helpers/user.js";
 
 export class DeleteUserController {
     constructor(deleteUserUseCase) {

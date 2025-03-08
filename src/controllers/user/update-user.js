@@ -1,9 +1,13 @@
 import validator from "validator";
-import { badRequest, internalServerError, updated } from "../helpers/http.js";
+import {
+    badRequest,
+    internalServerError,
+    updated,
+} from "../../helpers/http.js";
 import {
     verifyIfEmailIsValid,
     verifyIfPasswordIsValid,
-} from "../helpers/user.js";
+} from "../../helpers/user.js";
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {

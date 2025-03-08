@@ -3,7 +3,7 @@ import {
     found,
     internalServerError,
     notFound,
-} from "../helpers/http.js";
+} from "../../helpers/http.js";
 import validator from "validator";
 
 export class GetUserByIdController {

@@ -1,16 +1,16 @@
-import { CreateUserController } from "../../controllers/create-user.js";
-import { DeleteUserController } from "../../controllers/delete-user.js";
-import { GetUserByIdController } from "../../controllers/get-user-by-id.js";
-import { UpdateUserController } from "../../controllers/update-user.js";
-import { CreateUserRepository } from "../../repositories/create-user.js";
-import { DeleteUserRepository } from "../../repositories/delete-user.js";
-import { GetUserByEmailRepository } from "../../repositories/get-user-by-email.js";
-import { GetUserByIdRepository } from "../../repositories/get-user-by-id.js";
-import { UpdateUserRepository } from "../../repositories/update-user.js";
-import { CreateUserUseCase } from "../../use-cases/create-user.js";
-import { DeleteUserUseCase } from "../../use-cases/delete-user.js";
-import { GetUserByIdUseCase } from "../../use-cases/get-user-by-id.js";
-import { UpdateUserUseCase } from "../../use-cases/update-user.js";
+import { CreateUserController } from "../../controllers/user/create-user.js";
+import { DeleteUserController } from "../../controllers/user/delete-user.js";
+import { GetUserByIdController } from "../../controllers/user/get-user-by-id.js";
+import { UpdateUserController } from "../../controllers/user/update-user.js";
+import { CreateUserUseCase } from "../../use-cases/user/create-user.js";
+import { DeleteUserUseCase } from "../../use-cases/user/delete-user.js";
+import { GetUserByIdUseCase } from "../../use-cases/user/get-user-by-id.js";
+import { UpdateUserUseCase } from "../../use-cases/user/update-user.js";
+import { CreateUserRepository } from "../../repositories/user/create-user.js";
+import { DeleteUserRepository } from "../../repositories/user/delete-user.js";
+import { GetUserByIdRepository } from "../../repositories/user/get-user-by-id.js";
+import { GetUserByEmailRepository } from "../../repositories/user/get-user-by-email.js";
+import { UpdateUserRepository } from "../../repositories/user/update-user.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -36,8 +36,12 @@ export const makeUpdateUserController = () => {
 };
 
 export const makeCreateUserController = () => {
+    const getUserByEmailRepository = new GetUserByEmailRepository();
     const createUserRepository = new CreateUserRepository();
-    const createUserUseCase = new CreateUserUseCase(createUserRepository);
+    const createUserUseCase = new CreateUserUseCase(
+        getUserByEmailRepository,
+        createUserRepository
+    );
     const createUserController = new CreateUserController(createUserUseCase);
 
     return createUserController;
