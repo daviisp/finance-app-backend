@@ -12,6 +12,13 @@ export const updated = (body) => {
     };
 };
 
+export const okEmpty = () => {
+    return {
+        statusCode: 201,
+        body: null,
+    };
+};
+
 export const found = (body) => {
     return {
         statusCode: 200,
