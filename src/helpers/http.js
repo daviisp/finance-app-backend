@@ -14,7 +14,7 @@ export const updated = (body) => {
 
 export const okEmpty = () => {
     return {
-        statusCode: 201,
+        statusCode: 204,
         body: null,
     };
 };
