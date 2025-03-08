@@ -4,6 +4,7 @@ import cors from "cors";
 import { CreateUserController } from "./controllers/create-user.js";
 import { GetUserByIdController } from "./controllers/get-user-by-id.js";
 import { UpdateUserController } from "./controllers/update-user.js";
+import { DeleteUserController } from "./controllers/delete-user.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -28,6 +29,13 @@ app.patch("/api/users/:id", async (request, response) => {
 app.post("/api/users", async (request, response) => {
     const createUserController = new CreateUserController();
     const { statusCode, body } = await createUserController.execute(request);
+
+    return response.status(statusCode).json(body);
+});
+
+app.delete("/api/users/:id", async (request, response) => {
+    const deleteUserController = new DeleteUserController();
+    const { statusCode, body } = await deleteUserController.execute(request);
 
     return response.status(statusCode).json(body);
 });
