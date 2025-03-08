@@ -1,6 +1,6 @@
-import { badRequest, internalServerError } from "../helpers/http";
-import { verifyIfIdIsUUID } from "../helpers/user";
-import { DeleteUserUseCase } from "../use-cases/delete-user";
+import { badRequest, internalServerError, okEmpty } from "../helpers/http.js";
+import { verifyIfIdIsUUID } from "../helpers/user.js";
+import { DeleteUserUseCase } from "../use-cases/delete-user.js";
 
 export class DeleteUserController {
     async execute(httpRequest) {
@@ -22,6 +22,8 @@ export class DeleteUserController {
                     errorMessage: result.errorMessage,
                 });
             }
+
+            return okEmpty();
         } catch (err) {
             console.error(err);
             return internalServerError({

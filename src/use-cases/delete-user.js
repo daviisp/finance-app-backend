@@ -1,5 +1,5 @@
-import { DeleteUserRepository } from "../repositories/delete-user";
-import { GetUserByIdRepository } from "../repositories/get-user-by-id";
+import { DeleteUserRepository } from "../repositories/delete-user.js";
+import { GetUserByIdRepository } from "../repositories/get-user-by-id.js";
 
 export class DeleteUserUseCase {
     async execute(userId) {
