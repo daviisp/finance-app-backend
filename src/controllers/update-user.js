@@ -10,7 +10,7 @@ export class UpdateUserController {
         this.updateUserUseCase = updateUserUseCase;
     }
 
-    async exeucte(httpRequest) {
+    async execute(httpRequest) {
         try {
             const userId = httpRequest.params.id;
 
