@@ -1,5 +1,4 @@
 import validator from "validator";
-import { UpdateUserUseCase } from "../use-cases/update-user.js";
 import { badRequest, internalServerError, updated } from "../helpers/http.js";
 import {
     verifyIfEmailIsValid,
@@ -7,6 +6,10 @@ import {
 } from "../helpers/user.js";
 
 export class UpdateUserController {
+    constructor(updateUserUseCase) {
+        this.updateUserUseCase = updateUserUseCase;
+    }
+
     async exeucte(httpRequest) {
         try {
             const userId = httpRequest.params.id;
@@ -60,9 +63,10 @@ export class UpdateUserController {
                 password,
             };
 
-            const updateUserUseCase = new UpdateUserUseCase();
-
-            const result = await updateUserUseCase.execute(userId, userData);
+            const result = await this.updateUserUseCase.execute(
+                userId,
+                userData
+            );
 
             if (result.errorMessage) {
                 return badRequest({

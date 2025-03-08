@@ -1,8 +1,10 @@
 import { badRequest, internalServerError, okEmpty } from "../helpers/http.js";
 import { verifyIfIdIsUUID } from "../helpers/user.js";
-import { DeleteUserUseCase } from "../use-cases/delete-user.js";
 
 export class DeleteUserController {
+    constructor(deleteUserUseCase) {
+        this.deleteUserUseCase = deleteUserUseCase;
+    }
     async execute(httpRequest) {
         try {
             const userId = httpRequest.params.id;
@@ -13,9 +15,7 @@ export class DeleteUserController {
                 });
             }
 
-            const deleteUserUseCase = new DeleteUserUseCase();
-
-            const result = await deleteUserUseCase.execute(userId);
+            const result = await this.deleteUserUseCase.execute(userId);
 
             if (result.errorMessage) {
                 return badRequest({

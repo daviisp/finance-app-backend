@@ -1,5 +1,4 @@
 import { badRequest, internalServerError } from "../helpers/http.js";
-import { CreateUserUseCase } from "../use-cases/create-user.js";
 import { created } from "../helpers/http.js";
 import {
     verifyIfEmailIsValid,
@@ -7,6 +6,9 @@ import {
 } from "../helpers/user.js";
 
 export class CreateUserController {
+    constructor(createUserUseCase) {
+        this.createUserUseCase = createUserUseCase;
+    }
     async execute(httpRequest) {
         try {
             const params = httpRequest.body;
@@ -41,9 +43,7 @@ export class CreateUserController {
                 });
             }
 
-            const createUserUseCase = new CreateUserUseCase();
-
-            const result = await createUserUseCase.execute(params);
+            const result = await this.createUserUseCase.execute(params);
 
             if (result.errorMessage) {
                 return badRequest({

@@ -1,13 +1,17 @@
 import { hashPassword } from "../helpers/user.js";
-import { GetUserByEmailRepository } from "../repositories/get-user-by-email.js";
-import { GetUserByIdRepository } from "../repositories/get-user-by-id.js";
-import { UpdateUserRepository } from "../repositories/update-user.js";
 
 export class UpdateUserUseCase {
+    constructor(
+        getUserByIdRepository,
+        getUserByEmailRepository,
+        updateUserRepository
+    ) {
+        this.getUserByIdRepository = getUserByIdRepository;
+        this.getUserByEmailRepository = getUserByEmailRepository;
+        this.updateUserRepository = updateUserRepository;
+    }
     async execute(userId, updateUserParams) {
-        const getUserByIdRepository = new GetUserByIdRepository();
-
-        const userExists = await getUserByIdRepository.execute(userId);
+        const userExists = await this.getUserByIdRepository.execute(userId);
         if (!userExists) {
             return {
                 errorMessage: "User not found",
@@ -15,11 +19,10 @@ export class UpdateUserUseCase {
         }
 
         if (updateUserParams.email) {
-            const getUserByEmailRepository = new GetUserByEmailRepository();
-
-            const emailAlreadyInUse = await getUserByEmailRepository.execute(
-                updateUserParams.email
-            );
+            const emailAlreadyInUse =
+                await this.getUserByEmailRepository.execute(
+                    updateUserParams.email
+                );
 
             if (emailAlreadyInUse) {
                 return {
@@ -39,9 +42,7 @@ export class UpdateUserUseCase {
             userData.password = hashedPassword;
         }
 
-        const updateUserRepository = new UpdateUserRepository();
-
-        const updatedUser = await updateUserRepository.execute(
+        const updatedUser = await this.updateUserRepository.execute(
             userId,
             userData
         );

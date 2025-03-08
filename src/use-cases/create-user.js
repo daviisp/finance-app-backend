@@ -1,8 +1,10 @@
-import { CreateUserRepository } from "../repositories/create-user.js";
 import { GetUserByEmailRepository } from "../repositories/get-user-by-email.js";
 import { hashPassword } from "../helpers/user.js";
 
 export class CreateUserUseCase {
+    constructor(createUserRepository) {
+        this.createUserRepository = createUserRepository;
+    }
     async execute(createUserParams) {
         const getUserByEmailRepository = new GetUserByEmailRepository();
 
@@ -16,9 +18,7 @@ export class CreateUserUseCase {
 
         const hashedPassword = await hashPassword(createUserParams.password);
 
-        const createUserRepository = new CreateUserRepository();
-
-        const createdUser = await createUserRepository.execute({
+        const createdUser = await this.createUserRepository.execute({
             ...createUserParams,
             password: hashedPassword,
         });

@@ -1,4 +1,3 @@
-import { GetUserByIdUseCase } from "../use-cases/get-user-by-id.js";
 import {
     badRequest,
     found,
@@ -8,6 +7,9 @@ import {
 import validator from "validator";
 
 export class GetUserByIdController {
+    constructor(getUserByIdUseCase) {
+        this.getUserByIdUseCase = getUserByIdUseCase;
+    }
     async execute(httpRequest) {
         try {
             const userId = httpRequest.params.id;
@@ -18,9 +20,7 @@ export class GetUserByIdController {
                 });
             }
 
-            const getUserByIdUseCase = new GetUserByIdUseCase();
-
-            const user = await getUserByIdUseCase.execute(userId);
+            const user = await this.getUserByIdUseCase.execute(userId);
 
             if (!user) {
                 return notFound({
