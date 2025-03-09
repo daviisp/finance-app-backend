@@ -7,6 +7,7 @@ import {
     makeCreateUserController,
     makeDeleteUserController,
 } from "./factories/controllers/user.js";
+import { makeCreateTransactionController } from "./factories/controllers/transaction.js";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -14,9 +15,9 @@ const PORT = process.env.PORT || 8080;
 app.use(cors());
 app.use(express.json());
 
-app.get("/api/users/:id", async (request, response) => {
-    const getUserByIdController = makeGetUserByIdController();
-    const { statusCode, body } = await getUserByIdController.execute(request);
+app.post("/api/users", async (request, response) => {
+    const createUserController = makeCreateUserController();
+    const { statusCode, body } = await createUserController.execute(request);
 
     return response.status(statusCode).json(body);
 });
@@ -28,9 +29,9 @@ app.patch("/api/users/:id", async (request, response) => {
     return response.status(statusCode).json(body);
 });
 
-app.post("/api/users", async (request, response) => {
-    const createUserController = makeCreateUserController();
-    const { statusCode, body } = await createUserController.execute(request);
+app.get("/api/users/:id", async (request, response) => {
+    const getUserByIdController = makeGetUserByIdController();
+    const { statusCode, body } = await getUserByIdController.execute(request);
 
     return response.status(statusCode).json(body);
 });
@@ -38,6 +39,15 @@ app.post("/api/users", async (request, response) => {
 app.delete("/api/users/:id", async (request, response) => {
     const deleteUserController = makeDeleteUserController();
     const { statusCode, body } = await deleteUserController.execute(request);
+
+    return response.status(statusCode).json(body);
+});
+
+app.post("/api/transactions", async (request, response) => {
+    const createTransactionController = makeCreateTransactionController();
+    const { statusCode, body } = await createTransactionController.execute(
+        request
+    );
 
     return response.status(statusCode).json(body);
 });
