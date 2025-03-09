@@ -25,7 +25,7 @@ model Transaction {
   id     String          @id @default(uuid())
   name   String
   date   DateTime
-  amount Float
+  amount Decimal         @db.Decimal(10, 2)
   type   TransactionType
   userId String
   user   User            @relation(fields: [userId], references: [id])
