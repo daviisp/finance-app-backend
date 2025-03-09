@@ -57,9 +57,7 @@ export class CreateUserController {
             return created(result);
         } catch (err) {
             console.error(err);
-            return internalServerError({
-                errorMessage: "Internal server error",
-            });
+            return internalServerError();
         }
     }
 }

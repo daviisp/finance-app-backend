@@ -82,9 +82,7 @@ export class CreateTransactionController {
             return created(result);
         } catch (error) {
             console.error(error);
-            return internalServerError({
-                errorMessage: "Internal server error",
-            });
+            return internalServerError();
         }
     }
 }

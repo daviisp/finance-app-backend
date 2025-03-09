@@ -81,9 +81,7 @@ export class UpdateUserController {
             return updated(result);
         } catch (err) {
             console.error(err);
-            return internalServerError({
-                errorMessage: "Internal server error",
-            });
+            return internalServerError();
         }
     }
 }

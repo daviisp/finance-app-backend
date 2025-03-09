@@ -40,9 +40,11 @@ export const badRequest = (body) => {
     };
 };
 
-export const internalServerError = (body) => {
+export const internalServerError = () => {
     return {
         statusCode: 500,
-        body,
+        body: {
+            errorMessage: "Internal server error",
+        },
     };
 };

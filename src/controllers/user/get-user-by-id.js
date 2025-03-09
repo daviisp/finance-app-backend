@@ -31,9 +31,7 @@ export class GetUserByIdController {
             return found(user);
         } catch (err) {
             console.error(err);
-            return internalServerError({
-                errorMessage: "Internal server error",
-            });
+            return internalServerError();
         }
     }
 }

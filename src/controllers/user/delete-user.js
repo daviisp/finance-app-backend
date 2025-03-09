@@ -30,9 +30,7 @@ export class DeleteUserController {
             return okEmpty();
         } catch (err) {
             console.error(err);
-            return internalServerError({
-                errorMessage: "Internal server error",
-            });
+            return internalServerError();
         }
     }
 }
