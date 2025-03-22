@@ -6,7 +6,7 @@ import {
 import { verifyIfIdIsUUID } from "../../helpers/user.js";
 import validator from "validator";
 
-export class UpdateTransactionControlller {
+export class UpdateTransactionController {
     constructor(updateTransactionUseCase) {
         this.updateTransactionUseCase = updateTransactionUseCase;
     }
@@ -24,7 +24,7 @@ export class UpdateTransactionControlller {
             if (
                 (!params.name || !params.name.trim()) &&
                 (!params.type || !params.type.trim()) &&
-                (!params.amount || !params.amount.trim()) &&
+                !params.amount &&
                 (!params.date || !params.date.trim())
             ) {
                 return badRequest({
@@ -43,6 +43,8 @@ export class UpdateTransactionControlller {
                     });
                 }
             }
+
+            console.log(params.amount);
 
             if (params.amount !== undefined && params.amount !== null) {
                 if (params.amount === 0) {
