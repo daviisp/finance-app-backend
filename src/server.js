@@ -10,6 +10,7 @@ import {
 } from "./factories/controllers/user.js";
 import {
     makeCreateTransactionController,
+    makeDeleteTransactionController,
     makeGetTransactionsByUserIdController,
     makeUpdateTransactionController,
 } from "./factories/controllers/transaction.js";
@@ -68,8 +69,16 @@ app.post("/api/transactions", async (request, response) => {
 
 app.patch("/api/transactions/:id", async (request, response) => {
     const updateTransactionController = makeUpdateTransactionController();
-
     const { statusCode, body } = await updateTransactionController.execute(
+        request
+    );
+
+    return response.status(statusCode).json(body);
+});
+
+app.delete("/api/transactions/:id", async (request, response) => {
+    const deleteTransactionController = makeDeleteTransactionController();
+    const { statusCode, body } = await deleteTransactionController.execute(
         request
     );
 
