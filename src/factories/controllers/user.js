@@ -11,6 +11,9 @@ import { DeleteUserRepository } from "../../repositories/user/delete-user.js";
 import { GetUserByIdRepository } from "../../repositories/user/get-user-by-id.js";
 import { GetUserByEmailRepository } from "../../repositories/user/get-user-by-email.js";
 import { UpdateUserRepository } from "../../repositories/user/update-user.js";
+import { GetUserBalanceController } from "../../controllers/user/get-user-balance.js";
+import { GetUserBalanceUseCase } from "../../use-cases/user/get-user-balance.js";
+import { GetUserBalanceRepository } from "../../repositories/user/get-user-balance.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -57,4 +60,19 @@ export const makeDeleteUserController = () => {
     const deleteUserController = new DeleteUserController(deleteUserUseCase);
 
     return deleteUserController;
+};
+
+export const makeGetUserBalanceController = () => {
+    const getUserByIdRepository = new GetUserByIdRepository();
+    const getUserBalanceRepository = new GetUserBalanceRepository();
+    const getUserBalanceUseCase = new GetUserBalanceUseCase(
+        getUserByIdRepository,
+        getUserBalanceRepository
+    );
+
+    const getUserBalanceController = new GetUserBalanceController(
+        getUserBalanceUseCase
+    );
+
+    return getUserBalanceController;
 };
