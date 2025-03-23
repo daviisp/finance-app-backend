@@ -9,6 +9,7 @@ import {
 } from "./factories/controllers/user.js";
 import {
     makeCreateTransactionController,
+    makeGetTransactionsByUserIdController,
     makeUpdateTransactionController,
 } from "./factories/controllers/transaction.js";
 
@@ -61,6 +62,15 @@ app.patch("/api/transactions/:id", async (request, response) => {
     const { statusCode, body } = await updateTransactionController.execute(
         request
     );
+
+    return response.status(statusCode).json(body);
+});
+
+app.get("/api/transactions", async (request, response) => {
+    const getTransactionsByUserIdController =
+        makeGetTransactionsByUserIdController();
+    const { statusCode, body } =
+        await getTransactionsByUserIdController.execute(request);
 
     return response.status(statusCode).json(body);
 });
