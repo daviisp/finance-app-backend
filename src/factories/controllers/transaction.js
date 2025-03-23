@@ -6,6 +6,9 @@ import { CreateTransactionRepository } from "../../repositories/transaction/crea
 import { UpdateTransactionController } from "../../controllers/transaction/update-transaction.js";
 import { UpdateTransactionUseCase } from "../../use-cases/transaction/update-transaction.js";
 import { UpdateTransactionRepository } from "../../repositories/transaction/update-transaction.js";
+import { GetTransactionsByUserIdController } from "../../controllers/transaction/get-transactions-by-user-id.js";
+import { GetTransactionsByUserIdUseCase } from "../../use-cases/transaction/get-transactions-by-user-id.js";
+import { GetTransactionsByUserIdRepository } from "../../repositories/transaction/get-transactions-by-user-id.js";
 
 export const makeCreateTransactionController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -34,4 +37,19 @@ export const makeUpdateTransactionController = () => {
     );
 
     return updateTransactionController;
+};
+
+export const makeGetTransactionsByUserIdController = () => {
+    const getUserByIdRepository = new GetUserByIdRepository();
+    const getTransactionsByUserIdRepository =
+        new GetTransactionsByUserIdRepository();
+    const getTransactionsByUserIdUseCase = new GetTransactionsByUserIdUseCase(
+        getUserByIdRepository,
+        getTransactionsByUserIdRepository
+    );
+
+    const getTransactionsByUserIdController =
+        new GetTransactionsByUserIdController(getTransactionsByUserIdUseCase);
+
+    return getTransactionsByUserIdController;
 };
