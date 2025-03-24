@@ -4,10 +4,8 @@ import {
     internalServerError,
     updated,
 } from "../../helpers/http.js";
-import {
-    verifyIfEmailIsValid,
-    verifyIfPasswordIsValid,
-} from "../../helpers/user.js";
+import { createOrUpdateUserSchema } from "../../schemas/user.js";
+import { ZodError } from "zod";
 
 export class UpdateUserController {
     constructor(updateUserUseCase) {
@@ -17,6 +15,7 @@ export class UpdateUserController {
     async execute(httpRequest) {
         try {
             const userId = httpRequest.params.id;
+            const params = httpRequest.body;
 
             if (!userId || !validator.isUUID(userId)) {
                 return badRequest({
@@ -24,53 +23,9 @@ export class UpdateUserController {
                 });
             }
 
-            const { firstName, lastName, email, password } = httpRequest.body;
+            createOrUpdateUserSchema.parse(params);
 
-            if (
-                !firstName?.trim() &&
-                !lastName?.trim() &&
-                !email?.trim() &&
-                !password?.trim()
-            ) {
-                return badRequest({
-                    errorMessage: "At least one field must be provided",
-                });
-            }
-
-            if ("firstName" in httpRequest.body && !firstName.trim()) {
-                return badRequest({
-                    errorMessage: "First name cannot be empty",
-                });
-            }
-
-            if ("lastName" in httpRequest.body && !lastName.trim()) {
-                return badRequest({
-                    errorMessage: "Last name cannot be empty",
-                });
-            }
-
-            if (
-                "password" in httpRequest.body &&
-                !verifyIfPasswordIsValid(password)
-            ) {
-                return badRequest({ errorMessage: "Invalid password" });
-            }
-
-            if ("email" in httpRequest.body && !verifyIfEmailIsValid(email)) {
-                return badRequest({ errorMessage: "Invalid email" });
-            }
-
-            const userData = {
-                firstName,
-                lastName,
-                email,
-                password,
-            };
-
-            const result = await this.updateUserUseCase.execute(
-                userId,
-                userData
-            );
+            const result = await this.updateUserUseCase.execute(userId, params);
 
             if (result.errorMessage) {
                 return badRequest({
@@ -81,6 +36,11 @@ export class UpdateUserController {
             return updated(result);
         } catch (err) {
             console.error(err);
+            if (err instanceof ZodError) {
+                return badRequest({
+                    errorMessage: err.errors[0].message,
+                });
+            }
             return internalServerError();
         }
     }

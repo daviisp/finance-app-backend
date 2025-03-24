@@ -1,12 +1,10 @@
+import { ZodError } from "zod";
 import {
     badRequest,
     internalServerError,
     created,
 } from "../../helpers/http.js";
-import {
-    verifyIfEmailIsValid,
-    verifyIfPasswordIsValid,
-} from "../../helpers/user.js";
+import { createOrUpdateUserSchema } from "../../schemas/user.js";
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -15,36 +13,8 @@ export class CreateUserController {
     async execute(httpRequest) {
         try {
             const params = httpRequest.body;
-            const requiredFields = [
-                "firstName",
-                "lastName",
-                "email",
-                "password",
-            ];
 
-            for (const field of requiredFields) {
-                if (!params[field] || params[field].trim().length === 0) {
-                    return badRequest({
-                        errorMessage: `Missing param: ${field}`,
-                    });
-                }
-            }
-
-            const passwordIsValid = verifyIfPasswordIsValid(params.password);
-
-            if (!passwordIsValid) {
-                return badRequest({
-                    errorMessage: "Password must be at least 6 characters long",
-                });
-            }
-
-            const emailIsValid = verifyIfEmailIsValid(params.email);
-
-            if (!emailIsValid) {
-                return badRequest({
-                    errorMessage: "Invalid email",
-                });
-            }
+            createOrUpdateUserSchema.parse(params);
 
             const result = await this.createUserUseCase.execute(params);
 
@@ -57,6 +27,11 @@ export class CreateUserController {
             return created(result);
         } catch (err) {
             console.error(err);
+            if (err instanceof ZodError) {
+                return badRequest({
+                    errorMessage: err.errors[0].message,
+                });
+            }
             return internalServerError();
         }
     }
