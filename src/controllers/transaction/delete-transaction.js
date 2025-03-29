@@ -22,8 +22,8 @@ export class DeleteTransactionController {
             await this.deleteTransactionUseCase.execute(transactionId);
 
             return okEmpty();
-        } catch (err) {
-            console.error(err);
+        } catch (error) {
+            console.error(error);
             return internalServerError();
         }
     }

@@ -20,20 +20,20 @@ export class CreateUserController {
             const result = await this.createUserUseCase.execute(params);
 
             return created(result);
-        } catch (err) {
-            if (err instanceof ZodError) {
+        } catch (error) {
+            if (error instanceof ZodError) {
                 return badRequest({
-                    errorMessage: err.errors[0].message,
+                    errorMessage: error.errors[0].message,
                 });
             }
 
-            if (err instanceof EmailAlreadyInUseError) {
+            if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({
-                    errorMessage: err.message,
+                    errorMessage: error.message,
                 });
             }
 
-            console.error(err);
+            console.error(error);
             return internalServerError();
         }
     }

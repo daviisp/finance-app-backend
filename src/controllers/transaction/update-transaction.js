@@ -28,11 +28,11 @@ export class UpdateTransactionController {
                 });
             }
             return updated(result);
-        } catch (err) {
-            console.error(err);
-            if (err instanceof ZodError) {
+        } catch (error) {
+            console.error(error);
+            if (error instanceof ZodError) {
                 return badRequest({
-                    errorMessage: err.errors[0].message,
+                    errorMessage: error.errors[0].message,
                 });
             }
             return internalServerError();

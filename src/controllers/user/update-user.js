@@ -28,26 +28,26 @@ export class UpdateUserController {
             const result = await this.updateUserUseCase.execute(userId, params);
 
             return updated(result);
-        } catch (err) {
-            if (err instanceof ZodError) {
+        } catch (error) {
+            if (error instanceof ZodError) {
                 return badRequest({
-                    errorMessage: err.errors[0].message,
+                    errorMessage: error.errors[0].message,
                 });
             }
 
-            if (err instanceof UserNotFoundError) {
+            if (error instanceof UserNotFoundError) {
                 return notFound({
-                    errorMessage: err.message,
+                    errorMessage: error.message,
                 });
             }
 
-            if (err instanceof EmailAlreadyInUseError) {
+            if (error instanceof EmailAlreadyInUseError) {
                 return badRequest({
-                    errorMessage: err.message,
+                    errorMessage: error.message,
                 });
             }
 
-            console.error(err);
+            console.error(error);
             return internalServerError();
         }
     }

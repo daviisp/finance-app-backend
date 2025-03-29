@@ -18,20 +18,15 @@ export class CreateTransactionController {
 
             const result = await this.createTransactionUseCase.execute(params);
 
-            if (result.errorMessage) {
-                return badRequest({
-                    errorMessage: result.errorMessage,
-                });
-            }
-
             return created(result);
         } catch (error) {
-            console.error(error);
             if (error instanceof ZodError) {
                 return badRequest({
                     errorMessage: error.errors[0].message,
                 });
             }
+
+            console.error(error);
             return internalServerError();
         }
     }
