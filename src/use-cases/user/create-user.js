@@ -1,3 +1,4 @@
+import { EmailAlreadyInUseError } from "../../errors/user.js";
 import { hashPassword } from "../../helpers/user.js";
 
 export class CreateUserUseCase {
@@ -11,7 +12,7 @@ export class CreateUserUseCase {
         );
 
         if (userExists) {
-            return { errorMessage: "Email already in use" };
+            throw new EmailAlreadyInUseError(createUserParams.email);
         }
 
         const hashedPassword = await hashPassword(createUserParams.password);

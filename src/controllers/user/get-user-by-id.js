@@ -1,10 +1,12 @@
+import { ZodError } from "zod";
 import {
     badRequest,
     found,
     internalServerError,
     notFound,
 } from "../../helpers/http.js";
-import validator from "validator";
+import { verifyIdSchema } from "../../schemas/id.js";
+import { UserNotFoundError } from "../../errors/user.js";
 
 export class GetUserByIdController {
     constructor(getUserByIdUseCase) {
@@ -14,22 +16,24 @@ export class GetUserByIdController {
         try {
             const userId = httpRequest.params.id;
 
-            if (!userId || !validator.isUUID(userId)) {
-                return badRequest({
-                    errorMessage: "Missing or invalid id",
-                });
-            }
+            verifyIdSchema.parse({ id: userId });
 
             const user = await this.getUserByIdUseCase.execute(userId);
 
-            if (!user) {
-                return notFound({
-                    errorMessage: "User not found",
+            return found(user);
+        } catch (err) {
+            if (err instanceof ZodError) {
+                return badRequest({
+                    errorMessage: err.errors[0].message,
                 });
             }
 
-            return found(user);
-        } catch (err) {
+            if (err instanceof UserNotFoundError) {
+                return notFound({
+                    errorMessage: err.message,
+                });
+            }
+
             console.error(err);
             return internalServerError();
         }

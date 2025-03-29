@@ -1,3 +1,5 @@
+import { UserNotFoundError } from "../../errors/user.js";
+
 export class DeleteUserUseCase {
     constructor(getUserByIdRepository, deleteUserRepository) {
         this.getUserByIdRepository = getUserByIdRepository;
@@ -5,10 +7,9 @@ export class DeleteUserUseCase {
     }
     async execute(userId) {
         const userExists = await this.getUserByIdRepository.execute(userId);
+
         if (!userExists) {
-            return {
-                errorMessage: "User not found",
-            };
+            throw new UserNotFoundError();
         }
 
         const deletedUser = await this.deleteUserRepository.execute(userId);

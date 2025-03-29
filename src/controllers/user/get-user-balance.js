@@ -1,5 +1,13 @@
-import { badRequest, internalServerError, ok } from "../../helpers/http.js";
-import validator from "validator";
+import { ZodError } from "zod";
+import {
+    badRequest,
+    internalServerError,
+    notFound,
+    ok,
+} from "../../helpers/http.js";
+
+import { verifyIdSchema } from "../../schemas/id.js";
+import { UserNotFoundError } from "../../errors/user.js";
 
 export class GetUserBalanceController {
     constructor(getUserBalanceUseCase) {
@@ -9,11 +17,7 @@ export class GetUserBalanceController {
         try {
             const userId = httpRequest.params.id;
 
-            if (!userId || !validator.isUUID(userId)) {
-                return badRequest({
-                    errorMessage: "Invalid or missing id",
-                });
-            }
+            verifyIdSchema.parse({ id: userId });
 
             const transactions = await this.getUserBalanceUseCase.execute(
                 userId
@@ -21,6 +25,18 @@ export class GetUserBalanceController {
 
             return ok(transactions);
         } catch (err) {
+            if (err instanceof ZodError) {
+                return badRequest({
+                    errorMessage: err.errors[0].message,
+                });
+            }
+
+            if (err instanceof UserNotFoundError) {
+                return notFound({
+                    errorMessage: err.message,
+                });
+            }
+
             console.error(err);
             return internalServerError();
         }

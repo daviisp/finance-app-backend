@@ -1,3 +1,7 @@
+import {
+    EmailAlreadyInUseError,
+    UserNotFoundError,
+} from "../../errors/user.js";
 import { hashPassword } from "../../helpers/user.js";
 
 export class UpdateUserUseCase {
@@ -12,10 +16,9 @@ export class UpdateUserUseCase {
     }
     async execute(userId, updateUserParams) {
         const userExists = await this.getUserByIdRepository.execute(userId);
+
         if (!userExists) {
-            return {
-                errorMessage: "User not found",
-            };
+            throw new UserNotFoundError();
         }
 
         if (updateUserParams.email) {
@@ -25,9 +28,7 @@ export class UpdateUserUseCase {
                 );
 
             if (emailAlreadyInUse) {
-                return {
-                    errorMessage: "Email already in use",
-                };
+                throw new EmailAlreadyInUseError();
             }
         }
 

@@ -5,6 +5,7 @@ import {
     created,
 } from "../../helpers/http.js";
 import { createOrUpdateUserSchema } from "../../schemas/user.js";
+import { EmailAlreadyInUseError } from "../../errors/user.js";
 
 export class CreateUserController {
     constructor(createUserUseCase) {
@@ -18,20 +19,21 @@ export class CreateUserController {
 
             const result = await this.createUserUseCase.execute(params);
 
-            if (result.errorMessage) {
-                return badRequest({
-                    errorMessage: result.errorMessage,
-                });
-            }
-
             return created(result);
         } catch (err) {
-            console.error(err);
             if (err instanceof ZodError) {
                 return badRequest({
                     errorMessage: err.errors[0].message,
                 });
             }
+
+            if (err instanceof EmailAlreadyInUseError) {
+                return badRequest({
+                    errorMessage: err.message,
+                });
+            }
+
+            console.error(err);
             return internalServerError();
         }
     }
