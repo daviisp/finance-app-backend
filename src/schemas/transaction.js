@@ -6,13 +6,16 @@ export const createTransactionSchema = z.object({
     name: z.string().trim().min(1),
     date: z.coerce.date(),
     type: z.enum(["EARNING", "EXPENSE", "INVESTMENT"]),
-    amount: z.number().refine((value) => {
-        return validator.isCurrency(value.toFixed(2), {
-            allow_decimal: true,
-            decimal_separator: ".",
-            digits_after_decimal: [2],
-        });
-    }),
+    amount: z
+        .number()
+        .positive()
+        .refine((value) => {
+            return validator.isCurrency(value.toFixed(2), {
+                allow_decimal: true,
+                decimal_separator: ".",
+                digits_after_decimal: [2],
+            });
+        }),
 });
 
 export const updateTransactionSchema = z.object({
