@@ -3,8 +3,10 @@ import {
     badRequest,
     created,
     internalServerError,
+    notFound,
 } from "../../helpers/http.js";
 import { createTransactionSchema } from "../../schemas/transaction.js";
+import { UserNotFoundError } from "../../errors/user.js";
 
 export class CreateTransactionController {
     constructor(createTransactionUseCase) {
@@ -23,6 +25,12 @@ export class CreateTransactionController {
             if (error instanceof ZodError) {
                 return badRequest({
                     errorMessage: error.errors[0].message,
+                });
+            }
+
+            if (error instanceof UserNotFoundError) {
+                return notFound({
+                    errorMessage: error.message,
                 });
             }
 

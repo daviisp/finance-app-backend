@@ -1,3 +1,5 @@
+import { UserNotFoundError } from "../../errors/user.js";
+
 export class CreateTransactionUseCase {
     constructor(getUserByIdRepository, createTransactionRepository) {
         this.getUserByIdRepository = getUserByIdRepository;
@@ -9,9 +11,7 @@ export class CreateTransactionUseCase {
         );
 
         if (!userExists) {
-            return {
-                errorMessage: "User not found",
-            };
+            throw new UserNotFoundError();
         }
 
         const createdTransaction =

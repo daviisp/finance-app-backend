@@ -1,3 +1,5 @@
+import { TransactionNotFoundError } from "../../errors/transaction.js";
+
 export class DeleteTransactionUseCase {
     constructor(getTransactionByIdRepository, deleteTransactionRepository) {
         this.getTransactionByIdRepository = getTransactionByIdRepository;
@@ -9,9 +11,7 @@ export class DeleteTransactionUseCase {
         );
 
         if (!transaction) {
-            return {
-                errorMessage: "Transaction not found",
-            };
+            throw new TransactionNotFoundError();
         }
 
         const deletedTransaction =
