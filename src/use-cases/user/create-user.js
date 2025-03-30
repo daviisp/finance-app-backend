@@ -1,8 +1,12 @@
 import { EmailAlreadyInUseError } from "../../errors/user.js";
-import { hashPassword } from "../../helpers/user.js";
 
 export class CreateUserUseCase {
-    constructor(getUserByEmailRepository, createUserRepository) {
+    constructor(
+        passwordHasherAdapter,
+        getUserByEmailRepository,
+        createUserRepository
+    ) {
+        this.passwordHasherAdapter = passwordHasherAdapter;
         this.getUserByEmailRepository = getUserByEmailRepository;
         this.createUserRepository = createUserRepository;
     }
@@ -15,7 +19,9 @@ export class CreateUserUseCase {
             throw new EmailAlreadyInUseError(createUserParams.email);
         }
 
-        const hashedPassword = await hashPassword(createUserParams.password);
+        const hashedPassword = await this.passwordHasherAdapter.execute(
+            createUserParams.password
+        );
 
         const createdUser = await this.createUserRepository.execute({
             ...createUserParams,

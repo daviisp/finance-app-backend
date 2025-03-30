@@ -4,7 +4,7 @@ import {
     notFound,
     updated,
 } from "../../helpers/http.js";
-import { createOrUpdateUserSchema } from "../../schemas/user.js";
+import { updateUserSchema } from "../../schemas/user.js";
 import { ZodError } from "zod";
 import { verifyIdSchema } from "../../schemas/id.js";
 import {
@@ -23,7 +23,7 @@ export class UpdateUserController {
             const params = httpRequest.body;
 
             verifyIdSchema.parse({ id: userId });
-            createOrUpdateUserSchema.parse(params);
+            updateUserSchema.parse(params);
 
             const result = await this.updateUserUseCase.execute(userId, params);
 

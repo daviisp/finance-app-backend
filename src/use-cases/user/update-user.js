@@ -2,10 +2,10 @@ import {
     EmailAlreadyInUseError,
     UserNotFoundError,
 } from "../../errors/user.js";
-import { hashPassword } from "../../helpers/user.js";
 
 export class UpdateUserUseCase {
     constructor(
+        passwordHasherAdapter,
         getUserByIdRepository,
         getUserByEmailRepository,
         updateUserRepository
@@ -13,6 +13,7 @@ export class UpdateUserUseCase {
         this.getUserByIdRepository = getUserByIdRepository;
         this.getUserByEmailRepository = getUserByEmailRepository;
         this.updateUserRepository = updateUserRepository;
+        this.passwordHasherAdapter = passwordHasherAdapter;
     }
     async execute(userId, updateUserParams) {
         const userExists = await this.getUserByIdRepository.execute(userId);
@@ -37,7 +38,7 @@ export class UpdateUserUseCase {
         };
 
         if (updateUserParams.password) {
-            const hashedPassword = await hashPassword(
+            const hashedPassword = await this.passwordHasherAdapter.execute(
                 updateUserParams.password
             );
             userData.password = hashedPassword;

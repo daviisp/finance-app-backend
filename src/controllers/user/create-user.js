@@ -4,7 +4,7 @@ import {
     internalServerError,
     created,
 } from "../../helpers/http.js";
-import { createOrUpdateUserSchema } from "../../schemas/user.js";
+import { createUserSchema } from "../../schemas/user.js";
 import { EmailAlreadyInUseError } from "../../errors/user.js";
 
 export class CreateUserController {
@@ -15,7 +15,7 @@ export class CreateUserController {
         try {
             const params = httpRequest.body;
 
-            createOrUpdateUserSchema.parse(params);
+            createUserSchema.parse(params);
 
             const result = await this.createUserUseCase.execute(params);
 

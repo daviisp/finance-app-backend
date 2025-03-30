@@ -14,6 +14,7 @@ import { UpdateUserRepository } from "../../repositories/user/update-user.js";
 import { GetUserBalanceController } from "../../controllers/user/get-user-balance.js";
 import { GetUserBalanceUseCase } from "../../use-cases/user/get-user-balance.js";
 import { GetUserBalanceRepository } from "../../repositories/user/get-user-balance.js";
+import { PasswordHasherAdapter } from "../../adapters/password-hasher.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -24,11 +25,13 @@ export const makeGetUserByIdController = () => {
 };
 
 export const makeUpdateUserController = () => {
+    const passwordHasherAdapter = new PasswordHasherAdapter();
     const getUserByIdRepository = new GetUserByIdRepository();
     const getUserByEmailRepository = new GetUserByEmailRepository();
     const updateUserRepository = new UpdateUserRepository();
 
     const updateUserUseCase = new UpdateUserUseCase(
+        passwordHasherAdapter,
         getUserByIdRepository,
         getUserByEmailRepository,
         updateUserRepository
@@ -39,9 +42,11 @@ export const makeUpdateUserController = () => {
 };
 
 export const makeCreateUserController = () => {
+    const passwordHasherAdapter = new PasswordHasherAdapter();
     const getUserByEmailRepository = new GetUserByEmailRepository();
     const createUserRepository = new CreateUserRepository();
     const createUserUseCase = new CreateUserUseCase(
+        passwordHasherAdapter,
         getUserByEmailRepository,
         createUserRepository
     );
