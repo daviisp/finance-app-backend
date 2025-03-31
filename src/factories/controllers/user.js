@@ -14,10 +14,11 @@ import { UpdateUserRepository } from "../../repositories/user/update-user.js";
 import { GetUserBalanceController } from "../../controllers/user/get-user-balance.js";
 import { GetUserBalanceUseCase } from "../../use-cases/user/get-user-balance.js";
 import { GetUserBalanceRepository } from "../../repositories/user/get-user-balance.js";
+import { LoginUserController } from "../../controllers/user/login-user.js";
+import { LoginUserUseCase } from "../../use-cases/user/login-user.js";
 import { PasswordHasherAdapter } from "../../adapters/password-hasher.js";
 import { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
-import { LoginUserUseCase } from "../../use-cases/user/login-user.js";
-import { LoginUserController } from "../../controllers/user/login-user.js";
+import { TokenGeneratorAdapter } from "../../adapters/token-generator.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -88,9 +89,11 @@ export const makeGetUserBalanceController = () => {
 export const makeLoginUserController = () => {
     const getUserByEmailRepository = new GetUserByEmailRepository();
     const passwordComparatorAdapter = new PasswordComparatorAdapter();
+    const tokenGeneratorAdapter = new TokenGeneratorAdapter();
     const loginUserUseCase = new LoginUserUseCase(
         getUserByEmailRepository,
-        passwordComparatorAdapter
+        passwordComparatorAdapter,
+        tokenGeneratorAdapter
     );
 
     const loginUserController = new LoginUserController(loginUserUseCase);

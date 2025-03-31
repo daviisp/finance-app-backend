@@ -1,10 +1,14 @@
 import { InvalidPasswordError, UserNotFoundError } from "../../errors/user.js";
-import jwt from "jsonwebtoken";
 
 export class LoginUserUseCase {
-    constructor(getUserByEmailRepository, passwordComparatorAdapter) {
+    constructor(
+        getUserByEmailRepository,
+        passwordComparatorAdapter,
+        tokenGeneratorAdapter
+    ) {
         this.getUserByEmailRepository = getUserByEmailRepository;
         this.passwordComparatorAdapter = passwordComparatorAdapter;
+        this.tokenGeneratorAdapter = tokenGeneratorAdapter;
     }
     async execute(email, password) {
         const user = await this.getUserByEmailRepository.execute(email);
@@ -22,20 +26,7 @@ export class LoginUserUseCase {
             throw new InvalidPasswordError();
         }
 
-        const tokens = {
-            accessToken: jwt.sign(
-                { userId: user.id },
-                process.env.JWT_ACCESS_TOKEN_SECRET,
-                { expiresIn: "15m" }
-            ),
-            refreshToken: jwt.sign(
-                {
-                    userId: user.id,
-                },
-                process.env.JWT_REFRESH_TOKEN_SECRET,
-                { expiresIn: "30d" }
-            ),
-        };
+        const tokens = await this.tokenGeneratorAdapter.execute(user.id);
 
         return {
             ...user,
