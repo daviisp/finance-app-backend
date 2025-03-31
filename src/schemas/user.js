@@ -24,3 +24,8 @@ export const updateUserSchema = z
             message: "At least one field must be provided",
         }
     );
+
+export const loginUserSchema = z.object({
+    email: z.string().email(),
+    password: z.string().trim().min(6),
+});
