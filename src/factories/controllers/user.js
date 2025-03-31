@@ -15,6 +15,9 @@ import { GetUserBalanceController } from "../../controllers/user/get-user-balanc
 import { GetUserBalanceUseCase } from "../../use-cases/user/get-user-balance.js";
 import { GetUserBalanceRepository } from "../../repositories/user/get-user-balance.js";
 import { PasswordHasherAdapter } from "../../adapters/password-hasher.js";
+import { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
+import { LoginUserUseCase } from "../../use-cases/user/login-user.js";
+import { LoginUserController } from "../../controllers/user/login-user.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -80,4 +83,17 @@ export const makeGetUserBalanceController = () => {
     );
 
     return getUserBalanceController;
+};
+
+export const makeLoginUserController = () => {
+    const getUserByEmailRepository = new GetUserByEmailRepository();
+    const passwordComparatorAdapter = new PasswordComparatorAdapter();
+    const loginUserUseCase = new LoginUserUseCase(
+        getUserByEmailRepository,
+        passwordComparatorAdapter
+    );
+
+    const loginUserController = new LoginUserController(loginUserUseCase);
+
+    return loginUserController;
 };
