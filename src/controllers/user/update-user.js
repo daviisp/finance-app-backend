@@ -19,7 +19,7 @@ export class UpdateUserController {
 
     async execute(httpRequest) {
         try {
-            const userId = httpRequest.params.id;
+            const userId = httpRequest.userId;
             const params = httpRequest.body;
 
             verifyIdSchema.parse({ id: userId });

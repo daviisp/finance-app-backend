@@ -14,7 +14,7 @@ export class GetTransactionsByUserIdController {
     }
     async execute(httpRequest) {
         try {
-            const userId = httpRequest.query.userId;
+            const userId = httpRequest.userId;
 
             verifyIdSchema.parse({ id: userId });
 

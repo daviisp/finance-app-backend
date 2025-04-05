@@ -14,11 +14,20 @@ export class CreateTransactionController {
     }
     async execute(httpRequest) {
         try {
+            const userId = httpRequest.userId;
             const params = httpRequest.body;
 
-            createTransactionSchema.parse(params);
+            createTransactionSchema.parse({
+                userId,
+                ...params,
+            });
 
-            const result = await this.createTransactionUseCase.execute(params);
+            const result = await this.createTransactionUseCase.execute(
+                userId,
+                params
+            );
+
+            console.log(userId, ...params);
 
             return created(result);
         } catch (error) {

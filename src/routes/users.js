@@ -7,6 +7,7 @@ import {
     makeLoginUserController,
     makeUpdateUserController,
 } from "../factories/controllers/user.js";
+import { auth } from "../middlewares/auth.js";
 
 export const userRouter = Router();
 
@@ -17,21 +18,21 @@ userRouter.post("/api/users", async (request, response) => {
     return response.status(statusCode).json(body);
 });
 
-userRouter.patch("/api/users/:id", async (request, response) => {
+userRouter.patch("/api/users", auth, async (request, response) => {
     const updateUserController = makeUpdateUserController();
     const { statusCode, body } = await updateUserController.execute(request);
 
     return response.status(statusCode).json(body);
 });
 
-userRouter.get("/api/users/:id", async (request, response) => {
+userRouter.get("/api/users", auth, async (request, response) => {
     const getUserByIdController = makeGetUserByIdController();
     const { statusCode, body } = await getUserByIdController.execute(request);
 
     return response.status(statusCode).json(body);
 });
 
-userRouter.get("/api/users/:id/balance", async (request, response) => {
+userRouter.get("/api/users/balance", auth, async (request, response) => {
     const getUserBalanceController = makeGetUserBalanceController();
     const { statusCode, body } = await getUserBalanceController.execute(
         request
@@ -40,7 +41,7 @@ userRouter.get("/api/users/:id/balance", async (request, response) => {
     return response.status(statusCode).json(body);
 });
 
-userRouter.delete("/api/users/:id", async (request, response) => {
+userRouter.delete("/api/users", auth, async (request, response) => {
     const deleteUserController = makeDeleteUserController();
     const { statusCode, body } = await deleteUserController.execute(request);
 

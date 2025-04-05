@@ -14,7 +14,7 @@ export class GetUserByIdController {
     }
     async execute(httpRequest) {
         try {
-            const userId = httpRequest.params.id;
+            const userId = httpRequest.userId;
 
             verifyIdSchema.parse({ id: userId });
 
