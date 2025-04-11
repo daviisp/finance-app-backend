@@ -7,6 +7,7 @@ import {
 } from "../../helpers/http.js";
 import { createTransactionSchema } from "../../schemas/transaction.js";
 import { UserNotFoundError } from "../../errors/user.js";
+import { verifyIdSchema } from "../../schemas/id.js";
 
 export class CreateTransactionController {
     constructor(createTransactionUseCase) {
@@ -17,17 +18,14 @@ export class CreateTransactionController {
             const userId = httpRequest.userId;
             const params = httpRequest.body;
 
-            createTransactionSchema.parse({
-                userId,
-                ...params,
-            });
+            verifyIdSchema.parse({ id: userId });
+
+            createTransactionSchema.parse(params);
 
             const result = await this.createTransactionUseCase.execute(
                 userId,
                 params
             );
-
-            console.log(userId, ...params);
 
             return created(result);
         } catch (error) {
