@@ -1,9 +1,10 @@
 import { prisma } from "../../lib/prisma.js";
 
 export class CreateTransactionRepository {
-    async execute(createTransactionParams) {
+    async execute(userId, createTransactionParams) {
         const createdTransaction = await prisma.transaction.create({
             data: {
+                userId,
                 ...createTransactionParams,
             },
         });
