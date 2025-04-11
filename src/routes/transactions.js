@@ -5,10 +5,11 @@ import {
     makeGetTransactionsByUserIdController,
     makeUpdateTransactionController,
 } from "../factories/controllers/transaction.js";
+import { auth } from "../middlewares/auth.js";
 
 export const transactionRouter = Router();
 
-transactionRouter.post("/api/transactions", async (request, response) => {
+transactionRouter.post("/api/transactions", auth, async (request, response) => {
     const createTransactionController = makeCreateTransactionController();
     const { statusCode, body } = await createTransactionController.execute(
         request
@@ -35,7 +36,7 @@ transactionRouter.delete("/api/transactions/:id", async (request, response) => {
     return response.status(statusCode).json(body);
 });
 
-transactionRouter.get("/api/transactions", async (request, response) => {
+transactionRouter.get("/api/transactions", auth, async (request, response) => {
     const getTransactionsByUserIdController =
         makeGetTransactionsByUserIdController();
     const { statusCode, body } =
