@@ -2,7 +2,6 @@ import { z } from "zod";
 import validator from "validator";
 
 export const createTransactionSchema = z.object({
-    userId: z.string().uuid(),
     name: z.string().trim().min(1, {
         message: "Transaction name is required.",
     }),
