@@ -9,7 +9,7 @@ import { auth } from "../middlewares/auth.js";
 
 export const transactionRouter = Router();
 
-transactionRouter.post("/api/transactions", auth, async (request, response) => {
+transactionRouter.post("/transactions", auth, async (request, response) => {
     const createTransactionController = makeCreateTransactionController();
     const { statusCode, body } = await createTransactionController.execute(
         request
@@ -18,25 +18,33 @@ transactionRouter.post("/api/transactions", auth, async (request, response) => {
     return response.status(statusCode).json(body);
 });
 
-transactionRouter.patch("/api/transactions/:id", async (request, response) => {
-    const updateTransactionController = makeUpdateTransactionController();
-    const { statusCode, body } = await updateTransactionController.execute(
-        request
-    );
+transactionRouter.patch(
+    "/transactions/:id",
+    auth,
+    async (request, response) => {
+        const updateTransactionController = makeUpdateTransactionController();
+        const { statusCode, body } = await updateTransactionController.execute(
+            request
+        );
 
-    return response.status(statusCode).json(body);
-});
+        return response.status(statusCode).json(body);
+    }
+);
 
-transactionRouter.delete("/api/transactions/:id", async (request, response) => {
-    const deleteTransactionController = makeDeleteTransactionController();
-    const { statusCode, body } = await deleteTransactionController.execute(
-        request
-    );
+transactionRouter.delete(
+    "/transactions/:id",
+    auth,
+    async (request, response) => {
+        const deleteTransactionController = makeDeleteTransactionController();
+        const { statusCode, body } = await deleteTransactionController.execute(
+            request
+        );
 
-    return response.status(statusCode).json(body);
-});
+        return response.status(statusCode).json(body);
+    }
+);
 
-transactionRouter.get("/api/transactions", auth, async (request, response) => {
+transactionRouter.get("/transactions", auth, async (request, response) => {
     const getTransactionsByUserIdController =
         makeGetTransactionsByUserIdController();
     const { statusCode, body } =
