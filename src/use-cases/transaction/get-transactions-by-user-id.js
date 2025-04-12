@@ -6,15 +6,19 @@ export class GetTransactionsByUserIdUseCase {
         this.getTransactionsByUserIdRepository =
             getTransactionsByUserIdRepository;
     }
-    async execute(userId) {
-        const user = await this.getUserByIdRepository.execute(userId);
+    async execute(userId, from, to) {
+        const user = await this.getUserByIdRepository.execute(userId, from, to);
 
         if (!user) {
             throw new UserNotFoundError();
         }
 
         const transactions =
-            await this.getTransactionsByUserIdRepository.execute(userId);
+            await this.getTransactionsByUserIdRepository.execute(
+                userId,
+                from,
+                to
+            );
 
         return transactions;
     }
