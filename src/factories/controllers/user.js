@@ -49,13 +49,15 @@ export const makeUpdateUserController = () => {
 };
 
 export const makeCreateUserController = () => {
-    const passwordHasherAdapter = new PasswordHasherAdapter();
     const getUserByEmailRepository = new GetUserByEmailRepository();
+    const passwordHasherAdapter = new PasswordHasherAdapter();
+    const tokenGeneratorAdapter = new TokenGeneratorAdapter();
     const createUserRepository = new CreateUserRepository();
     const createUserUseCase = new CreateUserUseCase(
         passwordHasherAdapter,
         getUserByEmailRepository,
-        createUserRepository
+        createUserRepository,
+        tokenGeneratorAdapter
     );
     const createUserController = new CreateUserController(createUserUseCase);
 
