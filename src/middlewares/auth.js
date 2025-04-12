@@ -1,4 +1,6 @@
-import jwt from "jsonwebtoken";
+import { TokenVerifierAdapter } from "../adapters/token-verifier.js";
+
+const tokenVerifierAdapter = new TokenVerifierAdapter();
 
 export const auth = (request, response, next) => {
     try {
@@ -8,7 +10,7 @@ export const auth = (request, response, next) => {
             return response.status(401).json({ errorMessage: "Unauthorized." });
         }
 
-        const decodedToken = jwt.verify(
+        const decodedToken = tokenVerifierAdapter.execute(
             accessToken,
             process.env.JWT_ACCESS_TOKEN_SECRET
         );
