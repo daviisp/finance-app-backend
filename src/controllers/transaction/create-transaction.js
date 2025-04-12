@@ -41,7 +41,6 @@ export class CreateTransactionController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

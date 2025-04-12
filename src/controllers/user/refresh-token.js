@@ -13,8 +13,6 @@ export class RefreshTokenController {
                 params.refreshToken
             );
 
-            console.log(response);
-
             return ok(response);
         } catch (error) {
             if (error instanceof UnauthorizedError) {

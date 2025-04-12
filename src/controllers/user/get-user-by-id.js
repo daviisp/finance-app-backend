@@ -34,7 +34,6 @@ export class GetUserByIdController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

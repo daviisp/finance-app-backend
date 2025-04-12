@@ -43,7 +43,6 @@ export class LoginUserController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

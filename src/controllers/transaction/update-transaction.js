@@ -37,7 +37,7 @@ export class UpdateTransactionController {
                     errorMessage: error.message,
                 });
             }
-            console.error(error);
+
             return internalServerError();
         }
     }

@@ -47,7 +47,6 @@ export class UpdateUserController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

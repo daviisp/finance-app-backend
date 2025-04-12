@@ -33,7 +33,6 @@ export class CreateUserController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

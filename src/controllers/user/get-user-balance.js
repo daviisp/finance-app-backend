@@ -37,7 +37,6 @@ export class GetUserBalanceController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

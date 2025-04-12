@@ -34,7 +34,6 @@ export class DeleteUserController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

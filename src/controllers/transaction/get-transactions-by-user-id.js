@@ -35,7 +35,6 @@ export class GetTransactionsByUserIdController {
                 });
             }
 
-            console.error(error);
             return internalServerError();
         }
     }

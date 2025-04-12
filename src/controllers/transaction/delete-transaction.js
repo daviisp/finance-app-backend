@@ -33,7 +33,7 @@ export class DeleteTransactionController {
                     errorMessage: error.message,
                 });
             }
-            console.error(error);
+
             return internalServerError();
         }
     }
