@@ -55,3 +55,12 @@ export const internalServerError = () => {
         },
     };
 };
+
+export const unauthorized = () => {
+    return {
+        statusCode: 401,
+        body: {
+            errorMessage: "Unauthorized",
+        },
+    };
+};
