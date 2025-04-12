@@ -5,6 +5,7 @@ import {
     makeGetUserBalanceController,
     makeGetUserByIdController,
     makeLoginUserController,
+    makeRefreshTokenController,
     makeUpdateUserController,
 } from "../factories/controllers/user.js";
 import { auth } from "../middlewares/auth.js";
@@ -51,6 +52,13 @@ userRouter.delete("/api/users", auth, async (request, response) => {
 userRouter.post("/api/login", async (request, response) => {
     const loginUserController = makeLoginUserController();
     const { statusCode, body } = await loginUserController.execute(request);
+
+    return response.status(statusCode).json(body);
+});
+
+userRouter.post("/api/refresh-token", (request, response) => {
+    const refreshTokenController = makeRefreshTokenController();
+    const { statusCode, body } = refreshTokenController.execute(request);
 
     return response.status(statusCode).json(body);
 });
