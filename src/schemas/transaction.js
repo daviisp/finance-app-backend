@@ -58,3 +58,10 @@ export const updateTransactionSchema = z
             message: "At least one field must be provided.",
         }
     );
+
+export const getTransactionsByUserIdSchema = z.object({
+    from: z.coerce.date({
+        message: "Invalid date.",
+    }),
+    to: z.coerce.date({ message: "Invalid date." }),
+});
