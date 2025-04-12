@@ -19,6 +19,9 @@ import { LoginUserUseCase } from "../../use-cases/user/login-user.js";
 import { PasswordHasherAdapter } from "../../adapters/password-hasher.js";
 import { PasswordComparatorAdapter } from "../../adapters/password-comparator.js";
 import { TokenGeneratorAdapter } from "../../adapters/token-generator.js";
+import { RefreshTokenController } from "../../controllers/user/refresh-token.js";
+import { RefreshTokenUseCase } from "../../use-cases/user/refresh-token.js";
+import { TokenVerifierAdapter } from "../../adapters/token-verifier.js";
 
 export const makeGetUserByIdController = () => {
     const getUserByIdRepository = new GetUserByIdRepository();
@@ -99,4 +102,19 @@ export const makeLoginUserController = () => {
     const loginUserController = new LoginUserController(loginUserUseCase);
 
     return loginUserController;
+};
+
+export const makeRefreshTokenController = () => {
+    const tokenVerifierAdapter = new TokenVerifierAdapter();
+    const tokenGeneratorAdapter = new TokenGeneratorAdapter();
+    const refreshTokenUseCase = new RefreshTokenUseCase(
+        tokenVerifierAdapter,
+        tokenGeneratorAdapter
+    );
+
+    const refreshTokenController = new RefreshTokenController(
+        refreshTokenUseCase
+    );
+
+    return refreshTokenController;
 };
