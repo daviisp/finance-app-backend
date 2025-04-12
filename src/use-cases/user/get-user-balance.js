@@ -5,7 +5,7 @@ export class GetUserBalanceUseCase {
         this.getUserByIdRepository = getUserByIdRepository;
         this.getUserBalanceRepository = getUserBalanceRepository;
     }
-    async execute(userId) {
+    async execute(userId, from, to) {
         const user = await this.getUserByIdRepository.execute(userId);
 
         if (!user) {
@@ -13,7 +13,9 @@ export class GetUserBalanceUseCase {
         }
 
         const transactions = await this.getUserBalanceRepository.execute(
-            userId
+            userId,
+            from,
+            to
         );
 
         return transactions;

@@ -8,6 +8,7 @@ import {
 
 import { verifyIdSchema } from "../../schemas/id.js";
 import { UserNotFoundError } from "../../errors/user.js";
+import { getTransactionsByUserIdSchema } from "../../schemas/transaction.js";
 
 export class GetUserBalanceController {
     constructor(getUserBalanceUseCase) {
@@ -16,8 +17,10 @@ export class GetUserBalanceController {
     async execute(httpRequest) {
         try {
             const userId = httpRequest.userId;
+            const { from, to } = httpRequest.query;
 
             verifyIdSchema.parse({ id: userId });
+            getTransactionsByUserIdSchema.parse({ from, to });
 
             const transactions = await this.getUserBalanceUseCase.execute(
                 userId
